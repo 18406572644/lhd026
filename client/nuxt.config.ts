@@ -13,9 +13,9 @@ export default defineNuxtConfig({
     'element-plus/dist/index.css'
   ],
   runtimeConfig: {
-    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3001',
+    apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:6026',
     public: {
-      apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:3001'
+      apiBaseUrl: process.env.API_BASE_URL || 'http://localhost:6026'
     }
   },
   vite: {
@@ -29,7 +29,7 @@ export default defineNuxtConfig({
     server: {
       proxy: {
         '/api': {
-          target: process.env.API_BASE_URL || 'http://localhost:3001',
+          target: process.env.API_BASE_URL || 'http://localhost:6026',
           changeOrigin: true
         }
       }
@@ -38,12 +38,12 @@ export default defineNuxtConfig({
   nitro: {
     routeRules: {
       '/api/**': {
-        proxy: `${process.env.API_BASE_URL || 'http://localhost:3001'}/api/**`
+        proxy: `${process.env.API_BASE_URL || 'http://localhost:6026'}/api/**`
       }
     },
     devProxy: {
       '/api': {
-        target: process.env.API_BASE_URL || 'http://localhost:3001',
+        target: process.env.API_BASE_URL || 'http://localhost:6026',
         changeOrigin: true
       }
     }

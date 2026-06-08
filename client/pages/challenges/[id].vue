@@ -16,6 +16,20 @@
       <p>加载中...</p>
     </div>
 
+    <div v-else-if="error" class="error-state">
+      <el-empty description="加载失败">
+        <template #description>
+          <div class="error-content">
+            <p class="error-message">{{ error }}</p>
+            <el-button type="primary" @click="fetchData">
+              <el-icon><Refresh /></el-icon>
+              重新加载
+            </el-button>
+          </div>
+        </template>
+      </el-empty>
+    </div>
+
     <div v-else-if="!challenge" class="empty-state">
       <el-empty description="挑战不存在或已被删除" />
     </div>
@@ -308,6 +322,7 @@ const challengeStore = useChallengeStore()
 const subTaskStore = useSubTaskStore()
 
 const loading = ref(true)
+const error = ref<string | null>(null)
 const challenge = ref<Challenge | null>(null)
 const startDate = ref('')
 const endDate = ref('')
@@ -334,15 +349,21 @@ const ganttTasks = computed(() => {
 
 const fetchData = async () => {
   loading.value = true
+  error.value = null
   try {
     const id = route.params.id as string
+    if (!id) {
+      error.value = '无效的挑战ID'
+      return
+    }
+
     const result = challengeStore.getChallengeById(id)
     if (result) {
       challenge.value = result
       startDate.value = result.startDate || ''
       endDate.value = result.endDate || ''
     } else {
-      await challengeStore.fetchChallenges()
+      const fetchResult = await challengeStore.fetchChallenges()
       challenge.value = challengeStore.challenges.find(c => c.id === id) || null
       if (challenge.value) {
         startDate.value = challenge.value.startDate || ''
@@ -350,16 +371,21 @@ const fetchData = async () => {
       }
     }
 
-    if (challenge.value) {
-      await Promise.all([
-        subTaskStore.fetchSubTasks(id),
-        subTaskStore.fetchGanttData(id),
-        subTaskStore.fetchUpcomingDeadlines(7),
-        subTaskStore.fetchDelayedTasks(),
-      ])
+    if (!challenge.value) {
+      error.value = '未找到该挑战，请确认挑战是否存在'
+      return
     }
-  } catch (error) {
-    console.error('Failed to fetch data:', error)
+
+    await Promise.all([
+      subTaskStore.fetchSubTasks(id),
+      subTaskStore.fetchGanttData(id),
+      subTaskStore.fetchUpcomingDeadlines(7),
+      subTaskStore.fetchDelayedTasks(),
+    ])
+  } catch (err: any) {
+    console.error('Failed to fetch data:', err)
+    error.value = err.message || '数据加载失败，请检查网络连接或稍后重试'
+    challenge.value = null
   } finally {
     loading.value = false
   }
@@ -699,5 +725,23 @@ const onGanttTaskClick = (task: any) => {
 
 .delayed-title {
   color: #f56c6c;
+}
+
+.error-state {
+  padding: 40px 20px;
+  text-align: center;
+
+  .error-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .error-message {
+    color: #f56c6c;
+    font-size: 14px;
+    margin: 0;
+  }
 }
 </style>

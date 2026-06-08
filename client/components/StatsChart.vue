@@ -79,10 +79,10 @@
             <line
               v-for="i in 5"
               :key="'h' + i"
-              :x1="padding"
-              :y1="padding + (chartHeight / 5) * i"
-              :x2="svgWidth - padding"
-              :y2="padding + (chartHeight / 5) * i"
+              :x1="paddingLeft"
+              :y1="paddingTop + (chartHeight / 5) * i"
+              :x2="svgWidth - paddingRight"
+              :y2="paddingTop + (chartHeight / 5) * i"
               stroke="#e4e7ed"
               stroke-dasharray="4"
             />
@@ -115,8 +115,8 @@
             <text
               v-for="(item, index) in data"
               :key="index"
-              :x="padding + (chartWidth / (data.length - 1)) * index"
-              :y="svgHeight - 10"
+              :x="paddingLeft + (chartWidth / (data.length - 1)) * index"
+              :y="svgHeight - 15"
               text-anchor="middle"
               fill="#909399"
               font-size="11"
@@ -191,15 +191,18 @@ const pieSlices = computed(() => {
 
 const svgWidth = 600
 const svgHeight = 300
-const padding = 40
-const chartWidth = svgWidth - padding * 2
-const chartHeight = svgHeight - padding * 2
+const paddingTop = 40
+const paddingRight = 40
+const paddingBottom = 50
+const paddingLeft = 60
+const chartWidth = svgWidth - paddingLeft - paddingRight
+const chartHeight = svgHeight - paddingTop - paddingBottom
 
 const points = computed(() => {
   if (props.data.length === 0) return []
   return props.data.map((item, index) => ({
-    x: padding + (chartWidth / (props.data.length - 1)) * index,
-    y: padding + chartHeight - (item.value / maxValue.value) * chartHeight
+    x: paddingLeft + (chartWidth / (props.data.length - 1)) * index,
+    y: paddingTop + chartHeight - (item.value / maxValue.value) * chartHeight
   }))
 })
 
@@ -214,7 +217,7 @@ const areaPath = computed(() => {
   if (points.value.length === 0) return ''
   const first = points.value[0]
   const last = points.value[points.value.length - 1]
-  return `${linePath.value} L ${last.x} ${padding + chartHeight} L ${first.x} ${padding + chartHeight} Z`
+  return `${linePath.value} L ${last.x} ${paddingTop + chartHeight} L ${first.x} ${paddingTop + chartHeight} Z`
 })
 </script>
 
