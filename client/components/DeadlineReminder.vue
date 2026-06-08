@@ -102,13 +102,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { AlarmClock, Refresh, Warning, Clock } from '@element-plus/icons-vue'
 import { ElMessage } from 'element-plus'
 import { useSubTaskStore, type SubTask } from '../stores/subtask'
 
 const subTaskStore = useSubTaskStore()
-const router = useRouter()
 
 const dropdownVisible = ref(false)
 const showReminder = ref(true)
@@ -183,7 +181,7 @@ const onDropdownVisibleChange = (visible: boolean) => {
 }
 
 const goToTask = (task: SubTask) => {
-  router.push(`/challenges/${task.challengeId}`)
+  navigateTo(`/challenges/${task.challengeId}`)
   dropdownVisible.value = false
 }
 

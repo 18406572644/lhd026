@@ -86,13 +86,11 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
 import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Search, Loading } from '@element-plus/icons-vue'
 import type { Difficulty, Challenge } from '~/stores/challenge'
 
-const router = useRouter()
 const challengeStore = useChallengeStore()
 const recordStore = useRecordStore()
 const { challenges, loading } = storeToRefs(challengeStore)
@@ -144,7 +142,7 @@ const handleAdd = () => {
 }
 
 const handleView = (challenge: Challenge) => {
-  router.push(`/challenges/${challenge.id}`)
+  navigateTo(`/challenges/${challenge.id}`)
 }
 
 const handleEdit = (challenge: Challenge) => {

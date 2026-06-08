@@ -279,7 +279,7 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted, watch } from 'vue'
-import { useRoute, useRouter } from 'vue-router'
+import { useRoute } from 'nuxt/app'
 import {
   ArrowLeft,
   Loading,
@@ -304,7 +304,6 @@ import AiSuggestModal from '@/components/AiSuggestModal.vue'
 import GanttChart from '@/components/GanttChart.vue'
 
 const route = useRoute()
-const router = useRouter()
 const challengeStore = useChallengeStore()
 const subTaskStore = useSubTaskStore()
 
@@ -337,14 +336,18 @@ const fetchData = async () => {
   loading.value = true
   try {
     const id = route.params.id as string
-    const result = await challengeStore.getChallengeById(id)
+    const result = challengeStore.getChallengeById(id)
     if (result) {
       challenge.value = result
       startDate.value = result.startDate || ''
       endDate.value = result.endDate || ''
     } else {
-      const challenges = await challengeStore.fetchChallenges()
-      challenge.value = challenges?.find(c => c.id === id) || null
+      await challengeStore.fetchChallenges()
+      challenge.value = challengeStore.challenges.find(c => c.id === id) || null
+      if (challenge.value) {
+        startDate.value = challenge.value.startDate || ''
+        endDate.value = challenge.value.endDate || ''
+      }
     }
 
     if (challenge.value) {
@@ -374,7 +377,7 @@ watch(
 )
 
 const goBack = () => {
-  router.push('/challenges')
+  navigateTo('/challenges')
 }
 
 const formatDate = (dateStr: string | null) => {

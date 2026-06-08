@@ -96,13 +96,11 @@
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
 import { storeToRefs } from 'pinia'
-import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Calendar, Delete, Loading } from '@element-plus/icons-vue'
 import type { ChallengeRecord } from '~/stores/record'
 
 const recordStore = useRecordStore()
-const router = useRouter()
 const { records, loading } = storeToRefs(recordStore)
 
 onMounted(async () => {
@@ -142,7 +140,7 @@ const handleDelete = async (record: ChallengeRecord) => {
 }
 
 const goToHome = () => {
-  router.push('/')
+  navigateTo('/')
 }
 </script>
 
