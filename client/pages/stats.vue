@@ -129,10 +129,12 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { Loading } from '@element-plus/icons-vue'
 
 const challengeStore = useChallengeStore()
 const recordStore = useRecordStore()
+const { challenges } = storeToRefs(challengeStore)
 
 const loading = ref(true)
 
@@ -188,7 +190,7 @@ const categoryData = computed(() => {
   const categories = challengeStore.getStats.categories
   return categories.map(cat => ({
     label: cat,
-    value: challengeStore.challenges.filter(c => c.category === cat).length
+    value: challenges.value.filter(c => c.category === cat).length
   })).sort((a, b) => b.value - a.value)
 })
 

@@ -33,12 +33,12 @@
       </div>
     </div>
 
-    <div v-if="recordStore.loading" class="loading-state card">
+    <div v-if="loading" class="loading-state card">
       <el-icon class="loading-icon"><Loading /></el-icon>
       <p>加载中...</p>
     </div>
 
-    <div v-else-if="recordStore.records.length === 0" class="empty-state card">
+    <div v-else-if="records.length === 0" class="empty-state card">
       <div class="empty-icon">📝</div>
       <p class="empty-text">暂无完成记录，快去完成第一个挑战吧！</p>
       <el-button type="primary" size="large" @click="goToHome">
@@ -48,7 +48,7 @@
 
     <div v-else class="records-list">
       <div
-        v-for="record in recordStore.records"
+        v-for="record in records"
         :key="record.id"
         class="record-item card"
       >
@@ -95,6 +95,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { useRouter } from 'vue-router'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Calendar, Delete, Loading } from '@element-plus/icons-vue'
@@ -102,13 +103,14 @@ import type { ChallengeRecord } from '~/stores/record'
 
 const recordStore = useRecordStore()
 const router = useRouter()
+const { records, loading } = storeToRefs(recordStore)
 
 onMounted(async () => {
   await recordStore.fetchRecords()
 })
 
 const totalDuration = computed(() => {
-  return recordStore.records.reduce((sum, r) => sum + (r.durationMinutes || 0), 0)
+  return records.value.reduce((sum, r) => sum + (r.durationMinutes || 0), 0)
 })
 
 const formatDate = (dateStr: string) => {

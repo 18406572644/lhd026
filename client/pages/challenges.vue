@@ -44,7 +44,7 @@
       </div>
     </div>
 
-    <div v-if="challengeStore.loading" class="loading-state card">
+    <div v-if="loading" class="loading-state card">
       <el-icon class="loading-icon"><Loading /></el-icon>
       <p>加载中...</p>
     </div>
@@ -85,12 +85,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { Plus, Search, Loading } from '@element-plus/icons-vue'
 import type { Difficulty, Challenge } from '~/stores/challenge'
 
 const challengeStore = useChallengeStore()
 const recordStore = useRecordStore()
+const { challenges, loading } = storeToRefs(challengeStore)
 
 const filterDifficulty = ref<Difficulty | ''>('')
 const searchKeyword = ref('')
@@ -105,7 +107,7 @@ onMounted(async () => {
 })
 
 const filteredChallenges = computed(() => {
-  let list = challengeStore.challenges
+  let list = challenges.value
 
   if (filterDifficulty.value) {
     list = list.filter(c => c.difficulty === filterDifficulty.value)
@@ -152,6 +154,8 @@ const handleSubmit = async (data: Omit<Challenge, 'id' | 'createdAt' | 'updatedA
     ElMessage.success('✅ 挑战添加成功！')
   }
   editingChallenge.value = null
+  showAddModal.value = false
+  await challengeStore.fetchChallenges()
 }
 
 const handleDelete = async (challenge: Challenge) => {

@@ -33,6 +33,8 @@
 </template>
 
 <script setup lang="ts">
+import { House, Collection, List, DataLine } from '@element-plus/icons-vue'
+
 const route = useRoute()
 </script>
 

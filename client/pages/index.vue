@@ -109,12 +109,14 @@
 
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
+import { storeToRefs } from 'pinia'
 import { ElMessage } from 'element-plus'
 import { Check, Refresh, Close, Share } from '@element-plus/icons-vue'
 import type { Difficulty, Challenge } from '~/stores/challenge'
 
 const challengeStore = useChallengeStore()
 const recordStore = useRecordStore()
+const { challenges } = storeToRefs(challengeStore)
 
 const selectedDifficulty = ref<Difficulty | ''>('')
 const isDrawing = ref(false)
@@ -130,8 +132,8 @@ onMounted(async () => {
 
 const availableCount = computed(() => {
   const list = selectedDifficulty.value
-    ? challengeStore.challenges.filter(c => c.difficulty === selectedDifficulty.value)
-    : challengeStore.challenges
+    ? challenges.value.filter(c => c.difficulty === selectedDifficulty.value)
+    : challenges.value
   return list.length
 })
 

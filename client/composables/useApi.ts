@@ -9,9 +9,10 @@ export interface ApiResponse<T> {
 
 export const useApi = () => {
   const config = useRuntimeConfig()
+  const apiBaseUrl = config.public.apiBaseUrl || 'http://localhost:3001'
 
   const api = axios.create({
-    baseURL: process.client ? '/api' : 'http://localhost:3001/api',
+    baseURL: process.client ? '' : apiBaseUrl,
     timeout: 10000,
     headers: {
       'Content-Type': 'application/json'

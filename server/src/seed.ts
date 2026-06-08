@@ -2,6 +2,7 @@ import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
 import { config } from 'dotenv';
 import { Challenge } from './challenges/entities/challenge.entity';
+import { ChallengeRecord } from './records/entities/challenge-record.entity';
 import { Difficulty } from './common/types';
 
 config();
@@ -15,7 +16,7 @@ const AppDataSource = new DataSource({
   username: configService.get('DB_USERNAME', 'postgres'),
   password: configService.get('DB_PASSWORD', 'postgres'),
   database: configService.get('DB_NAME', 'challenge_tracker'),
-  entities: [Challenge],
+  entities: [Challenge, ChallengeRecord],
   synchronize: true,
 });
 

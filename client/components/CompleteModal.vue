@@ -81,7 +81,7 @@ const defaultForm = () => ({
 const form = ref(defaultForm())
 
 const rules: FormRules = {
-  durationMinutes: [{ required: true, message: '请输入用时', trigger: 'blur' },
+  durationMinutes: [{ required: true, message: '请输入用时', trigger: 'blur' }],
   note: [{ required: true, message: '请分享你的心得', trigger: 'blur' }]
 }
 
