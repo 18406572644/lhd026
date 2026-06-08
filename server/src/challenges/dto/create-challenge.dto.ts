@@ -1,4 +1,4 @@
-import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsNotEmpty, IsNumber, IsOptional, IsString, IsDateString } from 'class-validator';
 import { Difficulty } from '../../common/types';
 
 export class CreateChallengeDto {
@@ -21,4 +21,12 @@ export class CreateChallengeDto {
   @IsNumber()
   @IsOptional()
   points?: number;
+
+  @IsDateString()
+  @IsOptional()
+  startDate?: string;
+
+  @IsDateString()
+  @IsOptional()
+  endDate?: string;
 }

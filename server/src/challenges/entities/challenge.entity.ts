@@ -7,6 +7,7 @@ import {
   OneToMany,
 } from 'typeorm';
 import { ChallengeRecord } from '../../records/entities/challenge-record.entity';
+import { SubTask } from '../../subtasks/entities/subtask.entity';
 import { Difficulty } from '../../common/types';
 
 @Entity('challenges')
@@ -33,6 +34,15 @@ export class Challenge {
   @Column({ default: 0 })
   points: number;
 
+  @Column({ type: 'timestamp', nullable: true })
+  startDate: Date;
+
+  @Column({ type: 'timestamp', nullable: true })
+  endDate: Date;
+
+  @Column({ default: 0 })
+  overallProgress: number;
+
   @CreateDateColumn()
   createdAt: Date;
 
@@ -41,4 +51,7 @@ export class Challenge {
 
   @OneToMany(() => ChallengeRecord, (record) => record.challenge)
   records: ChallengeRecord[];
+
+  @OneToMany(() => SubTask, (subTask) => subTask.challenge)
+  subTasks: SubTask[];
 }

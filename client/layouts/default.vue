@@ -11,7 +11,7 @@
             <el-icon><House /></el-icon>
             <span>首页</span>
           </NuxtLink>
-          <NuxtLink to="/challenges" class="nav-item" :class="{ active: route.path === '/challenges' }">
+          <NuxtLink to="/challenges" class="nav-item" :class="{ active: route.path.startsWith('/challenges') }">
             <el-icon><Collection /></el-icon>
             <span>挑战库</span>
           </NuxtLink>
@@ -24,6 +24,9 @@
             <span>统计</span>
           </NuxtLink>
         </nav>
+        <div class="nav-right">
+          <DeadlineReminder />
+        </div>
       </div>
     </header>
     <main class="main-content">
@@ -34,6 +37,7 @@
 
 <script setup lang="ts">
 import { House, Collection, List, DataLine } from '@element-plus/icons-vue'
+import DeadlineReminder from '../components/DeadlineReminder.vue'
 
 const route = useRoute()
 </script>
@@ -60,7 +64,14 @@ const route = useRoute()
   height: 64px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 24px;
+}
+
+.nav-right {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
 .logo {

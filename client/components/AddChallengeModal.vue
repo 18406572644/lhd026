@@ -64,6 +64,26 @@
           />
         </el-select>
       </el-form-item>
+      <el-form-item label="开始日期">
+        <el-date-picker
+          v-model="form.startDate"
+          type="date"
+          placeholder="选择开始日期"
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </el-form-item>
+      <el-form-item label="截止日期">
+        <el-date-picker
+          v-model="form.endDate"
+          type="date"
+          placeholder="选择截止日期"
+          format="YYYY-MM-DD"
+          value-format="YYYY-MM-DD"
+          style="width: 100%"
+        />
+      </el-form-item>
     </el-form>
     <template #footer>
       <el-button @click="visible = false">取消</el-button>
@@ -106,7 +126,9 @@ const defaultForm = () => ({
   description: '',
   difficulty: 'easy' as Difficulty,
   points: 50,
-  category: ''
+  category: '',
+  startDate: '',
+  endDate: ''
 })
 
 const form = ref(defaultForm())
@@ -126,7 +148,9 @@ watch(() => props.challenge, (val) => {
       description: val.description,
       difficulty: val.difficulty,
       points: val.points,
-      category: val.category
+      category: val.category,
+      startDate: val.startDate || '',
+      endDate: val.endDate || ''
     }
   } else {
     form.value = defaultForm()
@@ -137,7 +161,11 @@ const handleSubmit = async () => {
   if (!formRef.value) return
   try {
     await formRef.value.validate()
-    emit('submit', { ...form.value })
+    emit('submit', {
+      ...form.value,
+      startDate: form.value.startDate || null,
+      endDate: form.value.endDate || null,
+    })
     visible.value = false
   } catch (e) {
     console.error('表单验证失败:', e)

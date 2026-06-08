@@ -14,6 +14,19 @@
       <DifficultyBadge :difficulty="challenge.difficulty" />
     </div>
     <p class="card-description">{{ challenge.description }}</p>
+    
+    <div v-if="challenge.overallProgress !== undefined" class="card-progress">
+      <div class="progress-label">
+        <span>进度</span>
+        <span class="progress-value">{{ challenge.overallProgress }}%</span>
+      </div>
+      <el-progress
+        :percentage="challenge.overallProgress"
+        :stroke-width="6"
+        color="#409eff"
+      />
+    </div>
+
     <div class="card-footer">
       <div class="card-meta">
         <span class="category">
@@ -29,6 +42,10 @@
         <el-button type="success" size="small" @click.stop="$emit('complete', challenge)">
           <el-icon><Check /></el-icon>
           完成
+        </el-button>
+        <el-button type="primary" size="small" @click.stop="$emit('view', challenge)">
+          <el-icon><View /></el-icon>
+          详情
         </el-button>
         <el-button type="primary" size="small" @click.stop="$emit('share', challenge)">
           <el-icon><Share /></el-icon>
@@ -52,7 +69,7 @@
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { Collection, Star, Check, Edit, Delete, Share } from '@element-plus/icons-vue'
+import { Collection, Star, Check, Edit, Delete, Share, View } from '@element-plus/icons-vue'
 import type { Challenge } from '~/stores/challenge'
 
 const props = withDefaults(defineProps<{
@@ -69,6 +86,7 @@ const props = withDefaults(defineProps<{
 const emit = defineEmits<{
   click: [challenge: Challenge]
   complete: [challenge: Challenge]
+  view: [challenge: Challenge]
   edit: [challenge: Challenge]
   delete: [challenge: Challenge]
   share: [challenge: Challenge]
@@ -168,6 +186,23 @@ const handleClick = () => {
 .points {
   color: #e6a23c;
   font-weight: 600;
+}
+
+.card-progress {
+  margin-bottom: 16px;
+
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    font-size: 12px;
+    color: #909399;
+
+    .progress-value {
+      color: #409eff;
+      font-weight: 600;
+    }
+  }
 }
 
 .card-actions {

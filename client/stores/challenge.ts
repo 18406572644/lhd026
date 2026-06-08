@@ -10,6 +10,9 @@ export interface Challenge {
   difficulty: Difficulty
   points: number
   category: string
+  startDate: string | null
+  endDate: string | null
+  overallProgress: number
   createdAt: string
   updatedAt: string
 }
