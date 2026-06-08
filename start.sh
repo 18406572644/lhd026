@@ -1,0 +1,25 @@
+#!/bin/bash
+echo "========================================"
+echo " Challenge App Docker 一键启动"
+echo "========================================"
+echo ""
+echo "[1/3] 停止并清理旧容器..."
+docker-compose down
+echo ""
+echo "[2/3] 构建并启动所有服务..."
+docker-compose up -d --build
+echo ""
+echo "[3/3] 等待服务启动..."
+sleep 5
+echo ""
+echo "========================================"
+echo " 服务启动完成！"
+echo "========================================"
+echo ""
+echo " 前端地址: http://localhost:2026"
+echo " 后端地址: http://localhost:6026"
+echo " 数据库端口: 5432"
+echo ""
+echo " 查看日志: docker-compose logs -f"
+echo " 停止服务: docker-compose down"
+echo ""
